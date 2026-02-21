@@ -1,8 +1,5 @@
 jQuery(function($) {
 
-      var pages = document.getElementsByClassName('page');
-      var page_numbers = pages.length;
-
       var runNumberFlipper = numberFlipper(loadOverlay);
 
       loadBGImage($('.seattle-photo'), "compressed/img/seattlephoto1.jpg", function() {
@@ -25,43 +22,38 @@ jQuery(function($) {
 
                 numberFlipperRunner(0, 10, runNumberFlipper);
 
-                loadBGImage($('#work-5 .image-preview'), "compressed/img/work-old-portfolio.png", function() {
+                var image = new Image();
+                image.src = "compressed/img/myphoto2-sm-min.jpg";
+                image.onload = function() {
+                  $('.my-photo-container .my-photo-wrapper').append(image);
 
-                  numberFlipperRunner(0, 10, runNumberFlipper);
+                  numberFlipperRunner(0, 50, runNumberFlipper);
 
-                  var image = new Image();
-                  image.src = "compressed/img/myphoto2-sm-min.jpg";
-                  image.onload = function() {
-                    $('.my-photo-container .my-photo-wrapper').append(image);
+                  if ($(window).width() > 767) {
+                    if (!(/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i).test(navigator.userAgent || navigator.vendor || window.opera)) {
+                      initScroll();
+                    }
+                  }
+                  // disable skrollr if the window is resized below 768px wide
+                  if (!(/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i).test(navigator.userAgent || navigator.vendor || window.opera)) {
+                    $(window).on('resize', function() {
 
-                    numberFlipperRunner(0, 40, runNumberFlipper);
+                      if ($(window).width() <= 780) {
+                        skrollr.init().destroy(); // skrollr.init() returns the singleton created above
+                      } else {
 
-                    if ($(window).width() > 767) {
-                      if (!(/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i).test(navigator.userAgent || navigator.vendor || window.opera)) {
                         initScroll();
                       }
-                    }
-                    // disable skrollr if the window is resized below 768px wide
-                    if (!(/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i).test(navigator.userAgent || navigator.vendor || window.opera)) {
-                      $(window).on('resize', function() {
 
-                        if ($(window).width() <= 780) {
-                          skrollr.init().destroy(); // skrollr.init() returns the singleton created above
-                        } else {
+                    });
+                  }
 
-                          initScroll();
-                        }
+                };
+                image.onerror = function() {
+                  console.error("image loaded unsuccessfully");
+                  loadOverlay();
+                };
 
-                      });
-                    }
-
-                  };
-                  image.onerror = function() {
-                    console.error("image loaded unsuccessfully");
-                    loadOverlay();
-                  };
-
-                });
               });
 
             });
@@ -130,9 +122,6 @@ jQuery(function($) {
             },
             work4: function() {
               return $("#work-page").offset().top + 4 * $(window).height() - 0.5 * $(window).height();
-            },
-            work5: function() {
-              return $("#work-page").offset().top + 5 * $(window).height() - 10 - 0.5 * $(window).height();
             }
 
           },
@@ -160,10 +149,8 @@ jQuery(function($) {
             checkPage(5);
           } else if ((_currentScroll.curTop >= $("#work-page").offset().top + 3 * $(window).height() - 0.5 * $(window).height()) && (_currentScroll.curTop < $("#work-page").offset().top + 4 * $(window).height() - 0.5 * $(window).height())) {
             checkPage(6);
-          } else if ((_currentScroll.curTop >= $("#work-page").offset().top + 4 * $(window).height() - 0.5 * $(window).height()) && (_currentScroll.curTop < $("#work-page").offset().top + 5 * $(window).height() - 10 - 0.5 * $(window).height())) {
+          } else if (_currentScroll.curTop >= $("#work-page").offset().top + 4 * $(window).height() - 0.5 * $(window).height()) {
             checkPage(7);
-          } else if (_currentScroll.curTop >= $("#work-page").offset().top + 5 * $(window).height() - 10 - 0.5 * $(window).height()) {
-            checkPage(8);
           }
 
           function checkPage(_newPage) {
@@ -196,9 +183,6 @@ jQuery(function($) {
                   break;
                 case 7:
                   $('#pagination-rotating-numbers').removeClass().addClass("page-7");
-                  break;
-                case 8:
-                  $('#pagination-rotating-numbers').removeClass().addClass("page-8");
                   break;
                 default:
 
@@ -287,14 +271,6 @@ jQuery(function($) {
                 ease: Power2.easeOut
               });
               break;
-            case "work-5":
-              TweenMax.to(window, 1, {
-                scrollTo: {
-                  y: $("#work-page").offset().top + 5 * $(window).height()
-                },
-                ease: Power2.easeOut
-              });
-              break;
             default:
               TweenMax.to(window, 1, {
                 scrollTo: {
@@ -320,9 +296,9 @@ jQuery(function($) {
       function typeIt() {
         $('.type-it').typeIt({
           strings: [
-            "I'm a Seattle-based <span class='nowrap'>software engineer</span> with <span class='nowrap mark'>5 years</span> <span class='nowrap'>of experience</span>...",
-            "I'm currently working on some cool projects at Microsoft 💚",
-            "I'm a Seattle-based <span class='nowrap'>software engineer</span> with <span class='nowrap mark'>5 years</span> <span class='nowrap'>of experience</span>."
+            "I'm a Seattle-based <span class='nowrap'>software engineer</span> with over <span class='nowrap mark'>a decade</span> <span class='nowrap'>of experience</span>...",
+            "Currently building SDKs and video ad platforms for <span class='nowrap mark'>MSN Play</span> at Microsoft.",
+            "I'm a Seattle-based <span class='nowrap'>software engineer</span> with over <span class='nowrap mark'>a decade</span> <span class='nowrap'>of experience</span>."
           ],
           speed: 50,
           startDelay: 1500,
@@ -399,8 +375,6 @@ jQuery(function($) {
       }
 
       function logoAnimation() {
-        var degree = 0;
-
         TweenMax.to($('.logo img'), 0.5, {
           rotation: "+=90",
           transformOrigin: '50% 50%',
