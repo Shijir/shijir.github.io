@@ -1,84 +1,76 @@
-define(['domReady', 'jquery', 'tweenmax', 'scrollto', 'typeit', 'skrollr'], function(domReady, $, TweenMax, scrollTo, typeIt, skrollr) {
+jQuery(function($) {
 
-  return {
-    initialize: function() {
       var pages = document.getElementsByClassName('page');
       var page_numbers = pages.length;
 
       var runNumberFlipper = numberFlipper(loadOverlay);
 
-      domReady(function() {
+      loadBGImage($('.seattle-photo'), "compressed/img/seattlephoto1.jpg", function() {
 
-        setScreens();
+        numberFlipperRunner(0, 10, runNumberFlipper);
 
-        loadBGImage($('.seattle-photo'), "../compressed/img/seattlephoto1.jpg", function() {
+        loadBGImage($('#work-1 .image-preview'), "compressed/img/work-internship.png", function() {
 
           numberFlipperRunner(0, 10, runNumberFlipper);
 
-          loadBGImage($('#work-1 .image-preview'), "../compressed/img/work-internship.png", function() {
+          loadBGImage($('#work-2 .image-preview'), "compressed/img/work-flashstudy.png", function() {
 
             numberFlipperRunner(0, 10, runNumberFlipper);
 
-            loadBGImage($('#work-2 .image-preview'), "../compressed/img/work-flashstudy.png", function() {
+            loadBGImage($('#work-3 .image-preview'), "compressed/img/work-fornetix.png", function() {
 
               numberFlipperRunner(0, 10, runNumberFlipper);
 
-              loadBGImage($('#work-3 .image-preview'), "../compressed/img/work-fornetix.png", function() {
+              loadBGImage($('#work-4 .image-preview'), "compressed/img/work-benbridge.png", function() {
 
                 numberFlipperRunner(0, 10, runNumberFlipper);
 
-                loadBGImage($('#work-4 .image-preview'), "../compressed/img/work-benbridge.png", function() {
+                loadBGImage($('#work-5 .image-preview'), "compressed/img/work-old-portfolio.png", function() {
 
                   numberFlipperRunner(0, 10, runNumberFlipper);
 
-                  loadBGImage($('#work-5 .image-preview'), "../compressed/img/work-old-portfolio.png", function() {
+                  var image = new Image();
+                  image.src = "compressed/img/myphoto2-sm-min.jpg";
+                  image.onload = function() {
+                    $('.my-photo-container .my-photo-wrapper').append(image);
 
-                    numberFlipperRunner(0, 10, runNumberFlipper);
+                    numberFlipperRunner(0, 40, runNumberFlipper);
 
-                    var image = new Image();
-                    image.src = "../compressed/img/myphoto2-sm-min.jpg";
-                    image.onload = function() {
-                      $('.my-photo-container .my-photo-wrapper').append(image);
+                    if ($(window).width() > 767) {
+                      if (!(/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i).test(navigator.userAgent || navigator.vendor || window.opera)) {
+                        initScroll();
+                      }
+                    }
+                    // disable skrollr if the window is resized below 768px wide
+                    if (!(/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i).test(navigator.userAgent || navigator.vendor || window.opera)) {
+                      $(window).on('resize', function() {
 
-                      numberFlipperRunner(0, 40, runNumberFlipper);
+                        if ($(window).width() <= 780) {
+                          skrollr.init().destroy(); // skrollr.init() returns the singleton created above
+                        } else {
 
-                      if ($(window).width() > 767) {
-                        if (!(/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i).test(navigator.userAgent || navigator.vendor || window.opera)) {
                           initScroll();
                         }
-                      }
-                      // disable skrollr if the window is resized below 768px wide
-                      if (!(/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i).test(navigator.userAgent || navigator.vendor || window.opera)) {
-                        $(window).on('resize', function() {
 
-                          if ($(window).width() <= 780) {
-                            skrollr.init().destroy(); // skrollr.init() returns the singleton created above
-                          } else {
+                      });
+                    }
 
-                            initScroll();
-                          }
+                  };
+                  image.onerror = function() {
+                    console.error("image loaded unsuccessfully");
+                    loadOverlay();
+                  };
 
-                        });
-                      }
-
-                    };
-                    image.onerror = function() {
-                      console.error("image loaded unsuccessfully");
-                      loadOverlay();
-                    };
-
-                  });
                 });
-
               });
+
             });
           });
-
         });
 
-
-
       });
+
+
 
       function initScroll() {
 
@@ -172,8 +164,6 @@ define(['domReady', 'jquery', 'tweenmax', 'scrollto', 'typeit', 'skrollr'], func
             checkPage(7);
           } else if (_currentScroll.curTop >= $("#work-page").offset().top + 5 * $(window).height() - 10 - 0.5 * $(window).height()) {
             checkPage(8);
-          } else {
-            console.log("start");
           }
 
           function checkPage(_newPage) {
@@ -224,18 +214,6 @@ define(['domReady', 'jquery', 'tweenmax', 'scrollto', 'typeit', 'skrollr'], func
       }
 
 
-
-      $('span.myname').on('click', function() {
-
-        var audioShijir = document.getElementById("audio-shijir");
-        var audioTsogoo = document.getElementById("audio-tsogoo");
-        audioShijir.play();
-
-        window.setTimeout(function() {
-          audioTsogoo.play();
-        }, 800);
-
-      });
 
       function showWorkInfo() {
 
@@ -342,9 +320,9 @@ define(['domReady', 'jquery', 'tweenmax', 'scrollto', 'typeit', 'skrollr'], func
       function typeIt() {
         $('.type-it').typeIt({
           strings: [
-            "I'm a Seattle-based <span class='nowrap'>UI/UX engineer</span> with <span class='nowrap mark'>5 years</span> <span class='nowrap'>of experience</span>...",
-            "I'm currently working on some cool projects at VMware 💚",
-            "I'm a Seattle-based <span class='nowrap'>UI/UX engineer</span> with <span class='nowrap mark'>5 years</span> <span class='nowrap'>of experience</span>."
+            "I'm a Seattle-based <span class='nowrap'>software engineer</span> with <span class='nowrap mark'>5 years</span> <span class='nowrap'>of experience</span>...",
+            "I'm currently working on some cool projects at Microsoft 💚",
+            "I'm a Seattle-based <span class='nowrap'>software engineer</span> with <span class='nowrap mark'>5 years</span> <span class='nowrap'>of experience</span>."
           ],
           speed: 50,
           startDelay: 1500,
@@ -450,151 +428,6 @@ define(['domReady', 'jquery', 'tweenmax', 'scrollto', 'typeit', 'skrollr'], func
       }
 
 
-      function parallaxOnMouseMove(target, strengthX, strengthY) {
-
-        //target element coordinates
-        var _target = target[0];
-        var clientRect = _target.getBoundingClientRect();
-        var centerX = (clientRect.left + clientRect.right) / 2;
-        var centerY = (clientRect.top + clientRect.bottom) / 2;
-
-        TweenMax.set(target, {
-          // perspective:200,
-          x: (getTranslateXY(target).x / clientRect.width * 100) + '%',
-          y: (getTranslateXY(target).y / clientRect.height * 100) + '%',
-          z: 0
-
-        });
-
-        $(window).mousemove(function(e) {
-          parallaxMove(e);
-
-        });
-
-        function parallaxMove(e) {
-
-
-          var mouseX = e.clientX;
-          var mouseY = e.clientY;
-
-          var moveX = (centerX - mouseX) * strengthX;
-          var moveY = (centerY - mouseY) * strengthY;
-
-          TweenMax.to(target, 1, {
-            x: moveX,
-            y: moveY,
-            // rotationX:moveY*2,
-            // rotationY:moveX*2,
-            transformOrigin: "50% 50%",
-            ease: Expo.easeOut,
-            force3D: true
-          });
-
-
-        }
-
-      }
-
-      function getTranslateXY(target) {
-
-        var transformMatrix = target.css("-webkit-transform") ||
-          target.css("-moz-transform") ||
-          target.css("-ms-transform") ||
-          target.css("-o-transform") ||
-          target.css("transform");
-        var matrix = transformMatrix.replace(/[^0-9\-.,]/g, '').split(',');
-        var _x = matrix[12] || matrix[4]; //translate x
-        var _y = matrix[13] || matrix[5]; //translate y
-        return {
-          x: Number(_x),
-          y: Number(_y)
-        };
-      }
-
-      function getUniqRandomInts(min, max, num, oldRands) {
-
-        var rands = [];
-
-        var ri = 0;
-
-        while (ri < num) {
-          var rand = getRandomInt(min, max);
-          while (rands.includes(rand) || oldRands.includes(rand)) {
-            rand = getRandomInt(min, max);
-          }
-          rands[ri] = rand;
-          ri++;
-        }
-
-        return [rands, oldRands];
-
-      }
-
-
-
-      function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
-      }
-
-      function getScreenSize() {
-        return {
-          width: window.innerWidth,
-          height: window.innerHeight
-        };
-      }
-
-      function getPageSize(pageId) {
-        return {
-          height: document.getElementById(pageId).style.height
-        };
-      }
-
-      function scollDistanceToPage(number) {
-        var totalHeight = 0;
-        for (var i = 1; i <= number; i++) {
-          totalHeight += parseInt(getPageSize('page-' + i).height);
-        }
-        return totalHeight;
-      }
-
-      /* height in px from top to a page */
-      function stackOnTop(page_id) {
-        var top = 0;
-        for (var id = 1; id < page_id; id++) {
-          top += parseInt(document.getElementById('page-' + id).style.height);
-        }
-        return top;
-      }
-
-      function PxElement(page, item, speed, easingSpeed, positions) {
-        /*jshint validthis:true */
-        this.page = page;
-        this.item = item;
-        this.speed = speed;
-        this.easingSpeed = easingSpeed;
-        this.positions = positions;
-
-      }
-
-
-
-      function pxUpdate(hsm, vsm, md, lg) {
-        if (getScreenSize().width < 768) {
-          if (getScreenSize().height > 480) {
-            return vsm;
-          } else {
-            return hsm;
-          }
-
-        }
-        if ((getScreenSize().width >= 768) && (getScreenSize().width < 1024)) {
-          return md;
-        }
-        if (getScreenSize().width >= 1024) {
-          return lg;
-        }
-      }
-
       function loadBGImage(element, url, successfulCallback) {
         successfulCallback = successfulCallback || null;
         $.ajax({
@@ -616,31 +449,4 @@ define(['domReady', 'jquery', 'tweenmax', 'scrollto', 'typeit', 'skrollr'], func
         });
       }
 
-      function setScreens() {
-
-
-        /*Set Page Heights*/
-        var windowHeight;
-        if (getScreenSize().height >= 480) {
-          windowHeight = getScreenSize().height;
-        } else {
-          windowHeight = getScreenSize().height;
-        }
-        // $('#top-page').height(windowHeight);
-        // $('#about-page').height(windowHeight*1.5);
-
-
-
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-          window.onorientationchange = setScreens;
-        } else {
-          window.onresize = setScreens;
-        }
-
-      }
-
-
-
-    }
-  };
 });
