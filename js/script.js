@@ -1,84 +1,78 @@
-define(['domReady', 'jquery', 'tweenmax', 'scrollto', 'typeit', 'skrollr'], function(domReady, $, TweenMax, scrollTo, typeIt, skrollr) {
+jQuery(function($) {
 
-  return {
-    initialize: function() {
       var pages = document.getElementsByClassName('page');
       var page_numbers = pages.length;
 
       var runNumberFlipper = numberFlipper(loadOverlay);
 
-      domReady(function() {
+      setScreens();
 
-        setScreens();
+      loadBGImage($('.seattle-photo'), "compressed/img/seattlephoto1.jpg", function() {
 
-        loadBGImage($('.seattle-photo'), "../compressed/img/seattlephoto1.jpg", function() {
+        numberFlipperRunner(0, 10, runNumberFlipper);
+
+        loadBGImage($('#work-1 .image-preview'), "compressed/img/work-internship.png", function() {
 
           numberFlipperRunner(0, 10, runNumberFlipper);
 
-          loadBGImage($('#work-1 .image-preview'), "../compressed/img/work-internship.png", function() {
+          loadBGImage($('#work-2 .image-preview'), "compressed/img/work-flashstudy.png", function() {
 
             numberFlipperRunner(0, 10, runNumberFlipper);
 
-            loadBGImage($('#work-2 .image-preview'), "../compressed/img/work-flashstudy.png", function() {
+            loadBGImage($('#work-3 .image-preview'), "compressed/img/work-fornetix.png", function() {
 
               numberFlipperRunner(0, 10, runNumberFlipper);
 
-              loadBGImage($('#work-3 .image-preview'), "../compressed/img/work-fornetix.png", function() {
+              loadBGImage($('#work-4 .image-preview'), "compressed/img/work-benbridge.png", function() {
 
                 numberFlipperRunner(0, 10, runNumberFlipper);
 
-                loadBGImage($('#work-4 .image-preview'), "../compressed/img/work-benbridge.png", function() {
+                loadBGImage($('#work-5 .image-preview'), "compressed/img/work-old-portfolio.png", function() {
 
                   numberFlipperRunner(0, 10, runNumberFlipper);
 
-                  loadBGImage($('#work-5 .image-preview'), "../compressed/img/work-old-portfolio.png", function() {
+                  var image = new Image();
+                  image.src = "compressed/img/myphoto2-sm-min.jpg";
+                  image.onload = function() {
+                    $('.my-photo-container .my-photo-wrapper').append(image);
 
-                    numberFlipperRunner(0, 10, runNumberFlipper);
+                    numberFlipperRunner(0, 40, runNumberFlipper);
 
-                    var image = new Image();
-                    image.src = "../compressed/img/myphoto2-sm-min.jpg";
-                    image.onload = function() {
-                      $('.my-photo-container .my-photo-wrapper').append(image);
+                    if ($(window).width() > 767) {
+                      if (!(/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i).test(navigator.userAgent || navigator.vendor || window.opera)) {
+                        initScroll();
+                      }
+                    }
+                    // disable skrollr if the window is resized below 768px wide
+                    if (!(/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i).test(navigator.userAgent || navigator.vendor || window.opera)) {
+                      $(window).on('resize', function() {
 
-                      numberFlipperRunner(0, 40, runNumberFlipper);
+                        if ($(window).width() <= 780) {
+                          skrollr.init().destroy(); // skrollr.init() returns the singleton created above
+                        } else {
 
-                      if ($(window).width() > 767) {
-                        if (!(/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i).test(navigator.userAgent || navigator.vendor || window.opera)) {
                           initScroll();
                         }
-                      }
-                      // disable skrollr if the window is resized below 768px wide
-                      if (!(/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i).test(navigator.userAgent || navigator.vendor || window.opera)) {
-                        $(window).on('resize', function() {
 
-                          if ($(window).width() <= 780) {
-                            skrollr.init().destroy(); // skrollr.init() returns the singleton created above
-                          } else {
+                      });
+                    }
 
-                            initScroll();
-                          }
+                  };
+                  image.onerror = function() {
+                    console.error("image loaded unsuccessfully");
+                    loadOverlay();
+                  };
 
-                        });
-                      }
-
-                    };
-                    image.onerror = function() {
-                      console.error("image loaded unsuccessfully");
-                      loadOverlay();
-                    };
-
-                  });
                 });
-
               });
+
             });
           });
-
         });
 
-
-
       });
+
+
 
       function initScroll() {
 
@@ -640,7 +634,4 @@ define(['domReady', 'jquery', 'tweenmax', 'scrollto', 'typeit', 'skrollr'], func
       }
 
 
-
-    }
-  };
 });

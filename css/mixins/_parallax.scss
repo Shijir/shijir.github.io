@@ -1,5 +1,0 @@
-@mixin enable-parallax($zindex) {
-    position: fixed;
-    z-index: $zindex;
-    display: block;
-}
